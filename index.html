@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Dashboard V5 - Servicios IT & Educación</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-primary: #1e293b;
+            --brand-accent: #4f46e5;
+            --brand-success: #10b981;
+            --bg-workspace: #f8fafc;
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-workspace); 
+            color: #334155;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .service-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 1.25rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .service-card:hover {
+            border-color: var(--brand-accent);
+            box-shadow: 0 12px 30px -10px rgba(79, 70, 229, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .btn-action {
+            background-color: var(--brand-accent);
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: #4338ca;
+            transform: scale(1.02);
+        }
+
+        .tab-btn {
+            padding: 1.25rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #64748b;
+            border-bottom: 3px solid transparent;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--brand-accent);
+            border-bottom-color: var(--brand-accent);
+            background-color: rgba(79, 70, 229, 0.03);
+        }
+
+        .tab-panel { display: none; }
+        .tab-panel.active { display: block; animation: slideIn 0.4s ease-out; }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        #cart-sidebar {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -15px 0 40px rgba(0,0,0,0.08);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: var(--brand-success);
+            display: inline-block;
+            margin-right: 6px;
+            box-shadow: 0 0 10px var(--brand-success);
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+<!-- Header -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-40 px-6 py-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+        <div class="flex items-center gap-4">
+            <div class="w-11 h-11 bg-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+            </div>
+            <div>
+                <h1 class="text-xl font-black text-slate-900 tracking-tight">DEV<span class="text-indigo-600">STUDIO</span></h1>
+                <p class="text-[9px] font-bold text-slate-400 uppercase tracking-[0.2em]">Servicios de Software & Educación</p>
+            </div>
+        </div>
+
+        <button onclick="toggleSidebar()" class="relative bg-slate-900 hover:bg-slate-800 text-white px-6 py-2.5 rounded-2xl font-bold flex items-center gap-3 transition-all shadow-xl shadow-slate-200">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span class="hidden sm:inline">Mi Selección</span>
+            <span id="counter" class="bg-indigo-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">0</span>
+        </button>
+    </div>
+</header>
+
+<main class="max-w-6xl mx-auto p-6 md:p-10">
+    
+    <!-- Status & Horarios -->
+    <section class="mb-12">
+        <div class="flex items-center gap-2 mb-6">
+            <span class="status-dot animate-pulse"></span>
+            <h2 class="text-[11px] font-black text-slate-400 uppercase tracking-widest">Consultoría Disponible</h2>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <p class="text-[10px] font-bold text-indigo-600 mb-1 uppercase">Viernes</p>
+                <p class="text-sm font-extrabold text-slate-900">Agenda tu cita </p>
+                <p class="text-[11px] text-slate-500">08:00 AM - 03:00 PM</p>
+            </div>
+            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm">
+                <p class="text-[10px] font-bold text-indigo-600 mb-1 uppercase">Viernes</p>
+                <p class="text-sm font-extrabold text-slate-900">Taller Marketing Afiliados</p>
+                <p class="text-[11px] text-slate-500">06:00 PM - 09:30 PM</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navegación de Panel -->
+    <div class="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm">
+        <div class="flex border-b border-slate-100 bg-slate-50/40">
+            <button onclick="showTab('servicios')" class="tab-btn active" id="btn-servicios">Catálogo de Soluciones</button>
+            <button onclick="showTab('detalles')" class="tab-btn" id="btn-detalles">Especificaciones</button>
+        </div>
+
+        <!-- Pestaña: Servicios -->
+        <div id="servicios" class="tab-panel active p-6 md:p-8 space-y-5">
+            
+            <!-- Servicio 1: Cotizador -->
+            <div class="service-card p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="w-16 h-16 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-600 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-lg">Creador de Cotizador Online</h3>
+                        <p class="text-sm text-slate-500 max-w-sm">Página de Aterrizaje para generar presupuestos y envío directo a WhatsApp.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 w-full md:w-auto justify-between border-t md:border-t-0 pt-4 md:pt-0">
+                    <div class="text-right">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Inversión Única</p>
+                        <p class="text-2xl font-black text-slate-900">$70.00</p>
+                    </div>
+                    <button onclick="addItem('Cotizador Online', 70)" class="btn-action px-6 py-3 rounded-xl font-bold text-sm">Contratar</button>
+                </div>
+            </div>
+
+            <!-- Servicio 2: Mantenimiento -->
+            <div class="service-card p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center text-slate-600 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-lg">Mantenimiento Cotizador</h3>
+                        <p class="text-sm text-slate-500 max-w-sm">Actualizaciones precios, cantidades, imagenes y optimización de módulos básicos del código html.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 w-full md:w-auto justify-between border-t md:border-t-0 pt-4 md:pt-0">
+                    <div class="text-right">
+                        <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">Plan Mensual</p>
+                        <p class="text-2xl font-black text-slate-900">$15.00</p>
+                    </div>
+                    <button onclick="addItem('Mantenimiento Cotizador', 15)" class="btn-action px-6 py-3 rounded-xl font-bold text-sm">Suscribir</button>
+                </div>
+            </div>
+
+            <!-- Servicio 3: LMS -->
+            <div class="service-card p-6 flex flex-col md:flex-row items-center justify-between gap-6 bg-indigo-50/20 border-indigo-100">
+                <div class="flex items-center gap-6">
+                    <div class="w-16 h-16 bg-indigo-600 rounded-2xl flex items-center justify-center text-white shrink-0 shadow-lg shadow-indigo-100">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-lg">Instalación LMS (Aula Virtual)</h3>
+                        <p class="text-sm text-slate-500 max-w-sm">Configuración completa de plataforma educativa (Online/Tutor) para venta de cursos.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 w-full md:w-auto justify-between border-t md:border-t-0 pt-4 md:pt-0">
+                    <div class="text-right">
+                        <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Proyecto Full</p>
+                        <p class="text-2xl font-black text-slate-900">$130.00</p>
+                    </div>
+                    <button onclick="addItem('Aula Virtual LMS', 130)" class="btn-action px-6 py-3 rounded-xl font-bold text-sm">Solicitar</button>
+                </div>
+            </div>
+
+            <!-- Servicio 4: Marketing -->
+            <div class="service-card p-6 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div class="flex items-center gap-6">
+                    <div class="w-16 h-16 bg-emerald-50 rounded-2xl flex items-center justify-center text-emerald-600 shrink-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><polyline points="17 11 19 13 23 9"></polyline></svg>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-slate-900 text-lg">Taller Marketing Afiliados</h3>
+                        <p class="text-sm text-slate-500 max-w-sm">Aprende a generar ingresos recomendando productos digitales. 100% práctico.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-6 w-full md:w-auto justify-between border-t md:border-t-0 pt-4 md:pt-0">
+                    <div class="text-right">
+                        <p class="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Acceso Taller</p>
+                        <p class="text-2xl font-black text-slate-900">$16.00</p>
+                    </div>
+                    <button onclick="addItem('Taller Afiliados', 16)" class="btn-action px-6 py-3 rounded-xl font-bold text-sm">Inscribirme</button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Pestaña: Detalles -->
+        <div id="detalles" class="tab-panel p-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="md:col-span-2 space-y-6">
+                    <h4 class="font-extrabold text-slate-900 text-lg">Información del Servicio</h4>
+                    <div class="space-y-4">
+                        <details class="group bg-slate-50 rounded-2xl p-4 border border-slate-100" open>
+                            <summary class="font-bold text-sm text-slate-700 cursor-pointer list-none flex justify-between items-center">
+                                ¿Qué incluye el Aula Virtual (LMS)?
+                                <span class="group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-4 text-xs text-slate-500 leading-relaxed space-y-2">
+                                <p>• Instalación de plataforma en tu hosting.</p>
+                                <p>• Configuración de pasarelas de pago (PayPal/Binance).</p>
+                                <p>• Carga de hasta 5 módulos iniciales.</p>
+                                <p>• Capacitación de 1 hora para el administrador.</p>
+                            </div>
+                        </details>
+                        <details class="group bg-slate-50 rounded-2xl p-4 border border-slate-100">
+                            <summary class="font-bold text-sm text-slate-700 cursor-pointer list-none flex justify-between items-center">
+                                Taller de Afiliados: Temario
+                                <span class="group-open:rotate-180 transition-transform">▼</span>
+                            </summary>
+                            <div class="pt-4 text-xs text-slate-500 leading-relaxed">
+                                Selección de nichos rentables, creación de embudos simples de WhatsApp y estrategias orgánicas en plataformas web para vender productos académicos.
+                            </div>
+                        </details>
+                    </div>
+                </div>
+                <div class="bg-indigo-600 rounded-3xl p-8 text-white flex flex-col justify-center shadow-2xl shadow-indigo-200">
+                    <h4 class="font-black text-xl mb-2">Garantía DevStudio</h4>
+                    <p class="text-indigo-100 text-xs leading-relaxed mb-6">Todos los servicios cuentan con soporte prioritario durante los primeros 15 días post-entrega.</p>
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">✔</div>
+                        <span class="text-[10px] font-bold uppercase tracking-widest">Calidad Asegurada</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Sidebar Carrito -->
+<div id="cart-sidebar" class="fixed top-0 right-0 w-full max-w-sm h-full bg-white z-50 border-l border-slate-100 translate-x-full flex flex-col">
+    <div class="p-8 border-b border-slate-50 flex items-center justify-between">
+        <div>
+            <h2 class="text-xl font-black text-slate-900">MI ORDEN</h2>
+            <p class="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Resumen de Selección</p>
+        </div>
+        <button onclick="toggleSidebar()" class="p-3 hover:bg-slate-50 rounded-2xl transition-colors border border-slate-100 text-slate-400">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+    </div>
+
+    <div id="cart-list" class="flex-grow overflow-y-auto p-8 space-y-4">
+        <!-- Render Items -->
+    </div>
+
+    <div class="p-8 border-t border-slate-50 bg-slate-50/30 space-y-6">
+        <div class="flex justify-between items-end">
+            <p class="text-[11px] font-black text-slate-400 uppercase tracking-[0.2em]">Total Presupuesto</p>
+            <p id="total-price" class="text-4xl font-black text-slate-900 leading-none">$0.00</p>
+        </div>
+        
+        <button onclick="checkout()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-5 rounded-2xl font-black uppercase text-xs tracking-[0.2em] transition-all shadow-2xl shadow-indigo-100">
+            Iniciar Proyecto
+        </button>
+        
+        <button onclick="clearAll()" class="w-full py-2 text-slate-300 hover:text-red-400 font-bold text-[10px] uppercase tracking-widest transition-colors">
+            Limpiar Selección
+        </button>
+    </div>
+</div>
+
+<div id="overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-slate-900/30 backdrop-blur-md z-40 hidden"></div>
+
+<script>
+    let cart = [];
+    const WHATSAPP = "584249408721";
+
+    function toggleSidebar() {
+        const sidebar = document.getElementById('cart-sidebar');
+        const overlay = document.getElementById('overlay');
+        const isOpen = !sidebar.classList.contains('translate-x-full');
+        
+        sidebar.classList.toggle('translate-x-full', isOpen);
+        overlay.classList.toggle('hidden', isOpen);
+    }
+
+    function showTab(tabId) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        
+        document.getElementById(tabId).classList.add('active');
+        document.getElementById('btn-' + tabId).classList.add('active');
+    }
+
+    function addItem(name, price) {
+        const exists = cart.find(i => i.name === name);
+        if (exists) {
+            exists.qty++;
+        } else {
+            cart.push({ name, price, qty: 1 });
+        }
+        updateUI();
+        if(cart.length === 1) toggleSidebar();
+    }
+
+    function updateQty(name, delta) {
+        const item = cart.find(i => i.name === name);
+        if (item) {
+            item.qty += delta;
+            if (item.qty <= 0) cart = cart.filter(i => i.name !== name);
+        }
+        updateUI();
+    }
+
+    function clearAll() {
+        cart = [];
+        updateUI();
+    }
+
+    function updateUI() {
+        const list = document.getElementById('cart-list');
+        const totalDisplay = document.getElementById('total-price');
+        const counter = document.getElementById('counter');
+        
+        list.innerHTML = cart.length === 0 ? `
+            <div class="flex flex-col items-center justify-center py-16 text-slate-300 text-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="mb-4 opacity-30"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                <p class="text-[10px] font-black uppercase tracking-widest">Sin servicios seleccionados</p>
+            </div>
+        ` : '';
+
+        let total = 0;
+        let count = 0;
+
+        cart.forEach(item => {
+            total += item.price * item.qty;
+            count += item.qty;
+            
+            const div = document.createElement('div');
+            div.className = "p-5 bg-white rounded-2xl border border-slate-100 flex justify-between items-center shadow-sm";
+            div.innerHTML = `
+                <div>
+                    <h5 class="text-[10px] font-black text-slate-900 uppercase tracking-tight">${item.name}</h5>
+                    <p class="text-indigo-600 font-black text-sm">$${(item.price * item.qty).toFixed(2)}</p>
+                </div>
+                <div class="flex items-center gap-3 bg-slate-50 p-1 rounded-xl">
+                    <button onclick="updateQty('${item.name}', -1)" class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-red-500 transition-colors">-</button>
+                    <span class="text-xs font-black text-slate-900 w-4 text-center">${item.qty}</span>
+                    <button onclick="updateQty('${item.name}', 1)" class="w-8 h-8 rounded-lg bg-white border border-slate-200 flex items-center justify-center text-slate-400 hover:text-indigo-600 transition-colors">+</button>
+                </div>
+            `;
+            list.appendChild(div);
+        });
+
+        totalDisplay.innerText = `$${total.toFixed(2)}`;
+        counter.innerText = count;
+    }
+
+    function checkout() {
+        if(cart.length === 0) return;
+        let text = "🚀 *NUEVA ORDEN DEVSTUDIO*\n\n";
+        cart.forEach(i => text += `🔹 ${i.name} (x${i.qty}) - $${(i.price * i.qty).toFixed(2)}\n`);
+        text += `\n💰 *TOTAL ESTIMADO: ${document.getElementById('total-price').innerText}*\n\nHola, me gustaría concretar estos servicios. ¿Cómo podemos empezar?`;
+        
+        window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
+    }
+</script>
+</body>
+</html>
